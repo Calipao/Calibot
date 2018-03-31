@@ -1,9 +1,11 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
+
+using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System;
 
 namespace CalibotCS.Modules
 {
@@ -50,7 +52,7 @@ namespace CalibotCS.Modules
                 efb.Name = "Properties";
                 efb.IsInline = true;
                 efb.Value =
-                    "I was written in C# using the Discord.NET 1.0.4 API.\n" +
+                    "I was written in C# using the Discord.NET 1.0.2 API.\n" +
                     "For help about this bot use the `help` command\n";
             });
             eb.AddField((efb) =>
@@ -62,6 +64,20 @@ namespace CalibotCS.Modules
                             "My birthday is on the 27th of May and I'm currently 18 years old.\n";
             });
             await ReplyAsync("", false, eb);
+        }
+
+        [Command("clean"), Alias("clear")]
+        [Summary("Delete all the messages from this bot within the last X messages")]
+        public async Task Clean([Summary("Number of message to delete")]int numMessages = 30)
+        {
+            if (numMessages > 50)
+                numMessages = 50;
+            else if (numMessages < 2)
+                numMessages = 2;
+            var msgs = await Context.Channel.GetMessagesAsync(numMessages).Flatten();
+            msgs = msgs.Where(x => x.Author.Id == Context.Client.CurrentUser.Id);
+            foreach (IMessage msg in msgs)
+                await msg.DeleteAsync();
         }
     }
 }

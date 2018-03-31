@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,10 +9,12 @@ namespace CalibotCS.Modules
     [Name("Help")]
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
-        private readonly CommandService m_service;
-        public HelpModule(CommandService _service)
+        private readonly CommandService m_commandService;
+        private readonly IConfiguration m_config;
+        public HelpModule(CommandService _service, IConfiguration _config)
         {
-            m_service = _service;
+            m_commandService = _service;
+            m_config = _config;
         }
         
         [Command("help"), Alias("h")]
@@ -21,11 +24,11 @@ namespace CalibotCS.Modules
             var builder = new EmbedBuilder()
             {
                 Color = new Color(255, 200, 0),
-                Description = "**Hello! I'm Calibot!**\nPrefix: `plz`",
+                Description = "**Hello! I'm Calibot!**\nPrefix: `" + m_config["prefix"] + "`",
             };
 
             //Loop through all modules
-            foreach (var module in m_service.Modules)
+            foreach (var module in m_commandService.Modules)
             {
                 string description = null;
                 //Skip the help module
@@ -66,7 +69,7 @@ namespace CalibotCS.Modules
         [Summary("Sends more help")]
         public async Task HelpAsync(string _command)
         {
-            var result = m_service.Search(Context, _command);
+            var result = m_commandService.Search(Context, _command);
 
             if (!result.IsSuccess)
             {
@@ -77,7 +80,7 @@ namespace CalibotCS.Modules
             var builder = new EmbedBuilder()
             {
                 Color = new Color(255, 200, 0),
-                Description = $"Aliases of **{_command}**"
+                Title = $":information_source: Info for **{_command}**"
             };
 
             foreach (var match in result.Commands)
@@ -86,9 +89,10 @@ namespace CalibotCS.Modules
 
                 builder.AddField(x =>
                 {
-                    x.Name = string.Join(", ", cmd.Aliases);
-                    x.Value = $"Parameters: {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" +
-                              $"Summary: {cmd.Summary}";
+                    x.Name = $"{cmd.Name}<{string.Join(", ", cmd.Parameters.Select(p => p.Name))}>";
+                    x.Value = $"**Aliases:** {string.Join(", ", cmd.Aliases)}\n" +
+                              $"**Parameters:** {string.Join(", ", cmd.Parameters.Select(p => p.Name))}\n" +
+                              $"**Summary:** {cmd.Summary}";
                     x.IsInline = false;
                 });
             }
