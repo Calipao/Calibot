@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace CalibotCS.Modules
             builder.AddField(x =>
             {
                 x.Name = "Help";
-                x.Value = "type `help <command>` for more info";
+                x.Value = "type `plz help <command>` for more info";
                 x.IsInline = false;
             });
 

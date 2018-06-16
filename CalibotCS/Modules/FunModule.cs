@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using Discord.Commands;
 
 using System;
@@ -58,11 +57,10 @@ namespace CalibotCS.Modules
         [Summary("Echos a message")]
         public async Task Say([Remainder, Summary("The text to echo")] string echo)
         {
-            //ReplyAsync is a mtheod on ModuleBase<SocketCommandContext>
             await ReplyAsync(echo);
         }
 
-        [Command("meme"), Alias("meimei", "dank")]
+        [Command("meme"), Alias("dank")]
         [Summary("Gives a dank meme")]
         public async Task SendMeme()
         {
@@ -78,9 +76,10 @@ namespace CalibotCS.Modules
 
                 //Randomly select a post
                 Random rand = new Random();
-                int r = rand.Next(subRedditPosts.Capacity - 1);
-                Math.Clamp(r, 2, subRedditPosts.Capacity - 1);
-
+                int r = rand.Next(subRedditPosts.Count);
+               
+                Console.WriteLine(string.Format("Subreddit Posts: {0}\n Random: {1}\n", subReddit.Posts.Count, r));
+               
                 var post = await redditService.GetPostAsync(subRedditPosts[r].Id);
 
                 //Builds the message to return to user
@@ -99,7 +98,7 @@ namespace CalibotCS.Modules
             }
         }
 
-        [Command("joke"), Alias("amuse","entertain")]
+        [Command("joke"), Alias("funny","jk")]
         [Summary("Gives u a bad joke")]
         public async Task SendJoke()
         {
@@ -138,18 +137,38 @@ namespace CalibotCS.Modules
             await msg.ModifyAsync(x => { x.Content = "( ͡⌐■ ͜ʖ ͡-■)"; });
         }
 
-        [Command("lenny"), Alias("len","lf")]
+        [Command("lenny"), Alias("lf")]
         [Summary("Posts a lenny face")]
         public async Task SendLenny()
         {
             await ReplyAsync("( ͡° ͜ʖ ͡°)");
         }
         
-        [Command("hi"), Alias("hello", "hai")]
+        [Command("hi"), Alias("hello", "hai", "hey")]
         [Summary("Says hi.")]
         public async Task SendHi()
         {
             await ReplyAsync("Hi, " + Context.Message.Author.Mention);
+        }
+
+        [Command("invite"), Alias("inv")]
+        [Summary("Gives an invite link to invite Calibot to your own Guild!")]
+        public async Task Invite()
+        {
+            var eb = new EmbedBuilder()
+            {
+                Title = "Invite Calibot",
+                Color = new Color(4, 97, 247),
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = $"Requested by {Context.User.Username}#{Context.User.Discriminator}",
+                    IconUrl = (Context.User.GetAvatarUrl())
+                },
+                Description =
+                    "[Click to Invite](https://discordapp.com/api/oauth2/authorize?client_id=428826752970784768&permissions=8&scope=bot)"
+            };
+
+            await ReplyAsync("", false, eb);
         }
     }
 }

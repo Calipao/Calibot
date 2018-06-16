@@ -36,6 +36,7 @@ namespace CalibotCS
             await m_client.LoginAsync(TokenType.Bot, m_config["token"]);
             await m_client.StartAsync();
             await m_client.SetGameAsync("with Calipao");
+            await m_client.SetStatusAsync(UserStatus.Online);
 
             //Don't let the bot end
             await Task.Delay(-1);

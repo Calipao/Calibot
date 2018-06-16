@@ -20,11 +20,8 @@ namespace CalibotCS.Services.Reddit
         public async Task<IList<string>> GetSubredditsAsync()
         {
             var subreddits = new List<string>();
-
             var response = await client.GetStringAsync("http://www.reddit.com/.json");
-
             var jObject = JObject.Parse(response);
-
             var jArray = jObject["data"]["children"] as JArray;
 
             foreach (var obj in jArray)
@@ -41,15 +38,10 @@ namespace CalibotCS.Services.Reddit
         public async Task<Subreddit> GetSubredditAsync(string name)
         {
             var subreddit = new Subreddit();
-
             subreddit.Name = name;
-
             subreddit.Posts = new List<Post>();
-
             var response = await client.GetStringAsync("http://www.reddit.com/r/" + name + "/.json");
-
             var jObject = JObject.Parse(response);
-
             var jArray = jObject["data"]["children"] as JArray;
 
             foreach (var obj in jArray)
@@ -77,11 +69,8 @@ namespace CalibotCS.Services.Reddit
         public async Task<IList<string>> SearchForSubredditsAsync(string query)
         {
             var subreddits = new List<string>();
-
             var response = await client.GetStringAsync("http://www.reddit.com/subreddits/search.json?q=" + query);
-
             var jObject = JObject.Parse(response);
-
             var jArray = jObject["data"]["children"] as JArray;
 
             foreach (var obj in jArray)
@@ -99,6 +88,7 @@ namespace CalibotCS.Services.Reddit
             var response = await client.GetStringAsync("http://www.reddit.com/api/info.json?id=t3_" + id);
             var jObject = JObject.Parse(response);
             var obj = (jObject["data"]["children"] as JArray)[0];
+
             post.Id = obj["data"]["id"].ToString();
             post.Title = obj["data"]["title"].ToString();
             post.Author = obj["data"]["author"].ToString();
@@ -110,6 +100,7 @@ namespace CalibotCS.Services.Reddit
             post.Spoiler = obj["data"]["spoiler"].Value<bool>();
             post.Nsfw = obj["data"]["over_18"].Value<bool>();
             post.Pinned = obj["data"]["distinguished"].ToString();
+
             return post;
         }
     }
