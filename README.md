@@ -1,20 +1,19 @@
-# CalipaoEngine
+# CaliBot
 
-Barebones of a simple game engine. Can be used to create 2D or 3D games.
+A simple c# discord bot made for fun.
 
 ## Installing
 
-* Download project
+* Download .zip
 * Run the visual studios solution file
+* Follow tutorial on discord webpage to host your own bot
 
 ## Built With
 
-* [OpenGL](https://www.opengl.org/) - Graphics
-* [Irrklang](http://www.ambiera.com/irrklang/) - Sound Engine
-* [ImGui](https://github.com/ocornut/imgui) - Open-Source GUI library
+* [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
 
 ## Authors
 
 * **Lin Xin** - [Calipao](https://github.com/Calipao)
 
-See also the list of [contributors](https://github.com/Calipao/GameEngine/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Calipao/Calibot/contributors) who participated in this project.
