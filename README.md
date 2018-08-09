@@ -5,7 +5,7 @@ A simple c# discord bot made for fun.
 ## Installing
 
 * Download .zip
-* Run the visual studios solution file
+* Build the solution
 * Follow tutorial on discord webpage to host your own bot
 
 ## Built With
